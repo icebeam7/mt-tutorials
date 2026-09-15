@@ -151,6 +151,14 @@ You can also enable Developer Options and USB debugging on an Android device and
 
 The emulator is usually easier, but requires memory.
 
+If you encounter errors related with Android CoreKtx version requiring an upgrade, follow these steps:
+
+- Find the `libs.versions.toml` file
+- Set `coreKtx` to "1.18.0" version
+- Set `lifecycleRuntimeKtx` to "2.10.0" version
+- Press the `Sync` button that appears on a yellow ribbon
+- Compile and Run the project again
+
 ---
 
 ## 5. What just happened?
