@@ -14,7 +14,7 @@ Create a working single-screen application where users can:
 
 ## 1. Keep the tasks in observable state
 
-Inside `StudentTasksApp()`:
+Inside `StudentTasksApp()`, set the `tasks` list to be observed by Compose by implementing `state` and `remember`. Update your `tasks` definition like this:
 
 ```kotlin
 var tasks by remember {
@@ -41,7 +41,7 @@ var tasks by remember {
 }
 ```
 
-Also create state for the new task title:
+Also create state for the new task title just below the previous code, still inside `StudentTasksApp()` function:
 
 ```kotlin
 var newTaskTitle by rememberSaveable {
@@ -49,11 +49,29 @@ var newTaskTitle by rememberSaveable {
 }
 ```
 
+Update the following lines in `StudentTasksApp()` method:
+
+```kotlin
+        val completedCount = sampleTasks.count { it.isCompleted }
+        Text(
+            "$completedCount of ${sampleTasks.size} completed"
+        )
+```
+
+with:
+
+```kotlin
+        val completedCount = tasks.count { it.isCompleted }
+        Text(
+            "$completedCount of ${tasks.size} completed"
+        )
+```
+
 ---
 
 ## 2. Add a task
 
-Create the input:
+Create the input. Add these code instead of `AddTaskExample()` call in `StudentTasksApp()` function:
 
 ```kotlin
 OutlinedTextField(
@@ -68,7 +86,7 @@ OutlinedTextField(
 )
 ```
 
-Add the button:
+Add the button just below the previous `OutlinedTextField` element:
 
 ```kotlin
 Button(
@@ -101,7 +119,7 @@ We create a new list and replace the old state value.
 
 A reusable UI component should not necessarily own the whole application state.
 
-Define:
+Replace your existing `TaskRow` function with this code:
 
 ```kotlin
 @Composable
@@ -152,11 +170,18 @@ fun TaskRow(
 
 `TaskRow` receives events as functions. It makes this composable reusable.
 
+Add these imports:
+
+```kotlin
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.text.style.TextDecoration
+```
+
 ---
 
 ## 4. Update the list when a checkbox changes
 
-Create:
+Replace your existing `TaskList` function with this code:
 
 ```kotlin
 @Composable
@@ -188,7 +213,13 @@ fun TaskList(
 }
 ```
 
-Now call it from the app:
+Now call it from the app. Replace this line in `StudentTasksApp()` function:
+
+```kotlin
+TaskList(sampleTasks)
+```
+
+with:
 
 ```kotlin
 TaskList(
@@ -216,13 +247,15 @@ Observe the two immutable transformations:
 tasks.map { ... }
 ```
 
-creates an updated list.
+which creates an updated list.
+
+And
 
 ```kotlin
 tasks.filter { ... }
 ```
 
-creates a list without the deleted task.
+which creates a list without the deleted task.
 
 ---
 
@@ -260,8 +293,6 @@ fun StudentTasksApp() {
         mutableStateOf("")
     }
 
-    val completedCount = tasks.count { it.isCompleted }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -272,6 +303,8 @@ fun StudentTasksApp() {
             text = "Student Tasks",
             style = MaterialTheme.typography.headlineLarge
         )
+
+        val completedCount = tasks.count { it.isCompleted }
 
         Text(
             text = "$completedCount of ${tasks.size} completed"
@@ -328,6 +361,11 @@ fun StudentTasksApp() {
     }
 }
 ```
+
+Test your app by adding a new task and marking it as completed:
+
+<img width="727" height="681" alt="image" src="https://github.com/user-attachments/assets/edd2539d-2e01-460f-ad25-74dccd8cae05" />
+
 
 ---
 
