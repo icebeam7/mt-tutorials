@@ -33,7 +33,7 @@ data class Task(
 
 ## 2. Create sample data
 
-Inside the app composable:
+Inside the `StudentTasksApp` composable function, before the first `Column`, declare the following constant:
 
 ```kotlin
 val sampleTasks = listOf(
@@ -58,7 +58,7 @@ val sampleTasks = listOf(
 
 ---
 
-## 3. Why `LazyColumn`?
+## 3. Introduction to `LazyColumn`
 
 A regular `Column` is useful for a small fixed number of children.
 
@@ -70,7 +70,7 @@ It composes list content as needed rather than treating every possible row as pe
 
 ## 4. Display the tasks
 
-Create:
+Create the following composable function:
 
 ```kotlin
 @Composable
@@ -90,7 +90,7 @@ fun TaskList(
 }
 ```
 
-Then create:
+Then replace your existing `TaskRow` function with the following implementation:
 
 ```kotlin
 @Composable
@@ -121,10 +121,19 @@ fun TaskRow(task: Task) {
 }
 ```
 
-Now display:
+Now, in `StudentTasksApp` function, replace the elements below `CounterExample()` with:
 
 ```kotlin
 TaskList(sampleTasks)
+```
+
+(so, instead of manually displaying 3 `TaskRow`, you are now dynamically displaying the task list members)
+
+You might need these imports:
+
+```kotlin
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 ```
 
 ---
@@ -134,7 +143,7 @@ TaskList(sampleTasks)
 Instead of:
 
 ```kotlin
-Text("3 tasks")
+CounterExample()
 ```
 
 use:
