@@ -31,8 +31,6 @@ Initial code for `MainActivity.kt`:
 ```kotlin
 package com.example.watertracker
 
-package com.example.watertracker
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
