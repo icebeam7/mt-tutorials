@@ -14,7 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.navArgument
+import androidx.navigation.navArgument
 ```
 
 - `Uri`: It is used to encode text before putting it in the route.
