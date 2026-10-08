@@ -39,6 +39,8 @@ fun HomeScreen(
 }
 ```
 
+You will need to import the packages for `Column`, `dp`, `Arrangement`, `MaterialTheme`. You will see an error in `TaskRow`. You will create this composable in the later section.
+
 ## HomeScreen purpose
 
 This `HomeScreen` composable is the screen that shows the list of tasks and lets the user tap one to open its details.
@@ -68,7 +70,7 @@ The `HomeScreen` is responsible for:
 
 ## 2. Create the TaskRow Composable
 
-Below the previous code, add the following Composable function:
+Below the previous code, add the `TaskRow` Composable function:
 
 ```kotlin
 @Composable
@@ -104,6 +106,8 @@ fun TaskRow(
     }
 }
 ```
+
+Import the missing packages for `Row`, `Card`, `fillMaxWidth`, `clickable`, `Alignment`, and `CardDefaults`.
 
 ## TaskRow purpose
 
