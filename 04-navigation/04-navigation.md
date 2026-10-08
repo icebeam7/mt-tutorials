@@ -93,6 +93,8 @@ fun StudyPlannerApp() {
 }
 ```
 
+Use the `StudyPlannerApp` in `onCreate` method.
+
 Here's the explanation of the code:
 
 `StudyPlannerApp` is the main screen container for the app. It creates the navigation system and holds the shared task list. It is the root composable that owns the app state, configures the navigation graph, and connects the home screen and detail screen together.
