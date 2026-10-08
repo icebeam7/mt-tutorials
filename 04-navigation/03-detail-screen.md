@@ -52,6 +52,8 @@ fun TaskDetailScreen(
 }
 ```
 
+Resolve the following missing references: `remember`, `mutableStateOf`, `getValue`, `setValue`, `Button`, `OutlinedButton`.
+
 ## TaskDetailScreen purpose
 
 `TaskDetailScreen` is the screen that shows the selected task in more detail.
