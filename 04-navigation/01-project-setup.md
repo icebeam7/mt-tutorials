@@ -18,11 +18,13 @@ In Android Studio:
 
 ## 2. Add the navigation dependency
 
-Open `app/build.gradle.kts` and add:
+Open `app/build.gradle.kts` (Module :app) and add the `androidx.navigation:navigation-compose` dependency. Check the following code in the `dependencies` section:
 
 ```kotlin
 dependencies {
+    //...
     implementation("androidx.navigation:navigation-compose:2.10.1")
+    //...
 }
 ```
 
@@ -32,7 +34,7 @@ Sync the project.
 
 ## 3. Model the task
 
-Create a file named `Task.kt`:
+Create a class named `Task.kt` in the `com.example.studyplanner` package. It is a `data` class that includes an enumeration.
 
 ```kotlin
 package com.example.studyplanner
