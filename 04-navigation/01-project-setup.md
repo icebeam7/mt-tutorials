@@ -18,12 +18,13 @@ In Android Studio:
 
 ## 2. Add the navigation dependency
 
-Open `app/build.gradle.kts` (Module :app) and add the `androidx.navigation:navigation-compose` dependency. Check the following code in the `dependencies` section:
+Open `app/build.gradle.kts` (Module :app) and add the `androidx.navigation:navigation-compose` and `libs.androidx.ui` dependencies. Check the following code in the `dependencies` section:
 
 ```kotlin
 dependencies {
     //...
     implementation("androidx.navigation:navigation-compose:2.10.1")
+    implementation("libs.androidx.ui")
     //...
 }
 ```
