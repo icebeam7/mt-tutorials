@@ -34,17 +34,29 @@ Sync the project.
 
 ## 3. Model the task
 
-Create a class named `Task.kt` in the `com.example.studyplanner` package. It is a `data` class that includes an enumeration.
+First, create `Task.kt` and add the package line
 
 ```kotlin
 package com.example.studyplanner
+```
 
+---
+
+Now, add the `Priority` enum under the package line
+
+```kotlin
 enum class Priority {
     LOW,
     MEDIUM,
     HIGH
 }
+```
 
+---
+
+Next, add the `Task` data class with `id` and `title` properties as well as `isCompleted` and `priority` with a default value
+
+```kotlin
 data class Task(
     val id: Int,
     val title: String,
