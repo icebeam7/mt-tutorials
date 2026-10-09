@@ -2,11 +2,13 @@
 
 [Previous: Project Setup](01-project-setup.md) | [Next: Detail Screen](03-detail-screen.md)
 
+<img width="521" height="580" alt="Screenshot 2026-10-09 at 5 09 15" src="https://github.com/user-attachments/assets/53c8b290-29d1-4863-bbf6-3c4a3b473157" />
+
 ## 1. Create the home screen main composable
 
 Remember: `@Composable` means that a function describes part of the UI. Jetpack Compose will draw it on screen based on the current state and parameters.
 
-In your `MainActivity.kt` class, add a composable like this:
+1. In your `MainActivity.kt` class, add a UI function `HomeScreen` with 2 arguments: `tasks` (the data to show) and `onTaskClick` (a callback for when a task is tapped).
 
 ```kotlin
 @Composable
@@ -14,63 +16,84 @@ fun HomeScreen(
     tasks: List<Task>,
     onTaskClick: (Task) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "Study Planner",
-            style = MaterialTheme.typography.headlineMedium
-        )
+}
+```
 
-        if (tasks.isEmpty()) {
-            Text("No tasks yet")
-        } else {
-            tasks.forEach { task ->
-                TaskRow(
-                    task = task,
-                    onClick = { onTaskClick(task) }
-                )
-            }
-        }
+---
+
+2. Inside the UI function, add a `Column` layout 
+
+```kotlin
+Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(24.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp)
+) {
+}
+```
+
+---
+
+3. The first element of the Column layout is a screen title text:
+
+```kotlin
+Text(
+    text = "Study Planner",
+    style = MaterialTheme.typography.headlineMedium
+)
+```
+
+---
+
+4. Next, show a message when there are no tasks (handles the empty state so users get feedback instead of a blank area):
+
+```kotlin
+if (tasks.isEmpty()) {
+    Text("No tasks yet")
+}
+```
+
+---
+
+5. Add the `else` branch to render tasks. If tasks exist, loop through each one and show a `TaskRow`. Clicking a row calls `onTaskClick(task)` with that specific task:
+
+```kotlin
+else {
+    tasks.forEach { task ->
+        TaskRow(
+            task = task,
+            onClick = { onTaskClick(task) }
+        )
     }
 }
 ```
 
-You will need to import the packages for `Column`, `dp`, `Arrangement`, `MaterialTheme`. You will see an error in `TaskRow`. You will create this composable in the later section.
+---
 
-## HomeScreen purpose
+6. Add required imports, for example:
 
-This `HomeScreen` composable is the screen that shows the list of tasks and lets the user tap one to open its details.
+```kotlin
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.unit.dp
+```
 
-It receives:
+---
 
-- `tasks: List<Task>`: the current task list
-- `onTaskClick: (Task) -> Unit`: a callback that runs when a task is tapped
-
-It creates a vertical layout with:
-
-- a title ("Study Planner")
-- a list of task cards if there are tasks or a message ("No tasks yet") if the list is empty
-
-Each task row is clickable, and when clicked it calls `onTaskClick(task)`.
-
-This is what we call a **reusable UI component**:
-
-- the screen is separated from the data
-- the parent screen decides what happens when a task is clicked
-- the child screen only displays the UI and triggers the event
+`TaskRow` is not defined yet, so a temporary error is normal. It will disappear after you create `TaskRow` in the next section.
 
 The `HomeScreen` is responsible for:
 - rendering tasks
 - responding to taps
 - sending the selected task to the navigation logic
 
+---
+
 ## 2. Create the TaskRow Composable
 
-Below the previous code, add the `TaskRow` Composable function:
+1. Below the `HomeScreen` function, add a new `TaskRow` Composable function. `TaskRow` is a small reusable UI item for one task in the list, so it will display one task. `task` provides its details, and `onClick` defines what happens when the row is tapped. 
 
 ```kotlin
 @Composable
@@ -78,51 +101,70 @@ fun TaskRow(
     task: Task,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(task.title)
-                Text(task.priority.name)
-            }
-
-            if (task.isCompleted) {
-                Text("Done")
-            } else {
-                Text("Pending")
-            }
-        }
-    }
 }
 ```
 
-Import the missing packages for `Row`, `Card`, `fillMaxWidth`, `clickable`, `Alignment`, and `CardDefaults`.
+---
 
-## TaskRow purpose
+2. Add a clickable card inside `TaskRow`:
 
-`TaskRow` is a small reusable UI item for one task in the list.
+```kotlin
+Card(
+    modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onClick() },
+    colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
+    )
+) {
+}
+```
 
-It receives:
+---
 
-- `task: Task`: the information for that specific task
-- `onClick: () -> Unit`: what happens when the row is tapped
+3. Add a horizontal layout inside `Card` using `Row`: 
 
-The composable builds a clickable card with:
+```kotlin
+Row(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp),
+    verticalAlignment = Alignment.CenterVertically
+) {
+}
+```
 
-- the task title
-- the priority
-- a status label: “Done” or “Pending”
+---
+
+4. Display the task title and priority inside `Row` using a `Column` to stack them together vertically:
+
+```kotlin 
+Column(modifier = Modifier.weight(1f)) {
+    Text(task.title)
+    Text(task.priority.name)
+}
+```
+
+5. Display the completion status below the `Column`, still inside `Row`:
+
+```kotlin 
+if (task.isCompleted) {
+    Text("Done")
+} else {
+    Text("Pending")
+}
+```
+
+6. Add the missing imports:
+
+```kotlin
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.Alignment
+```
 
 ---
 
@@ -132,6 +174,6 @@ The `Card` definition makes the whole row look like a card and adds click behavi
 
 Then inside the card, the `Row` element arranges the content horizontally.
 
-Inside the row, the `Column` definition takes the available space and shows task title and priority name, as well as the task status.
+Inside the row, the `Column` definition takes the available space and shows task details (title and priority), as well as the task status.
 
 [Previous: Project Setup](01-project-setup.md) | [Next: Detail Screen](03-detail-screen.md)
