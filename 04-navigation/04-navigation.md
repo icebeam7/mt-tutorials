@@ -6,7 +6,7 @@
 
 We will import packages that allows the app to create a **navigation graph**, **pass typed data between screens**, and **safely encode route values like task titles**.
 
-Make sure to import:
+Make sure to import the following packages in `MainActivity.kt`:
 
 ```kotlin
 import android.net.Uri
@@ -24,105 +24,27 @@ import androidx.navigation.navArgument
 - `rememberNavController`: It creates the navigation controller instance for the app.
 - `navArgument`: It defines each argument expected by a route.
 
+---
+
 ## 2. Set up the navigation graph
 
-In `MainActivity.kt`, create a parent composable:
+1. Create the parent composable. `StudyPlannerApp` connects the home and detail screens. It will hold the shared task list and manage navigation between screens. Add this below your existing composable functions:
 
-```kotlin
+```kotlin 
 @Composable
 fun StudyPlannerApp() {
-    val navController = rememberNavController()
-
-    var tasks by remember {
-        mutableStateOf(
-            listOf(
-                Task(1, "Study for my exam", false, Priority.HIGH),
-                Task(2, "Buy groceries", true, Priority.MEDIUM),
-                Task(3, "Read a book", false, Priority.LOW)
-            )
-        )
-    }
-
-    NavHost(
-        navController = navController,
-        startDestination = "home"
-    ) {
-        composable("home") {
-            HomeScreen(
-                tasks = tasks,
-                onTaskClick = { task ->
-                    navController.navigate(
-                        "taskDetail/${task.id}/${Uri.encode(task.title)}/${task.isCompleted}/${task.priority.name}"
-                    )
-                }
-            )
-        }
-
-        composable(
-            route = "taskDetail/{taskId}/{title}/{isCompleted}/{priority}",
-            arguments = listOf(
-                navArgument("taskId") { type = NavType.IntType },
-                navArgument("title") { type = NavType.StringType },
-                navArgument("isCompleted") { type = NavType.BoolType },
-                navArgument("priority") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val taskId = backStackEntry.arguments?.getInt("taskId") ?: 0
-            val title = backStackEntry.arguments?.getString("title") ?: ""
-            val isCompleted = backStackEntry.arguments?.getBoolean("isCompleted") ?: false
-            val priority = backStackEntry.arguments?.getString("priority") ?: "MEDIUM"
-
-            TaskDetailScreen(
-                taskId = taskId,
-                title = title,
-                isCompleted = isCompleted,
-                priority = priority,
-                onBack = { navController.popBackStack() },
-                onToggle = { newValue ->
-                    tasks = tasks.map { task ->
-                        if (task.id == taskId) {
-                            task.copy(isCompleted = newValue)
-                        } else {
-                            task
-                        }
-                    }
-                }
-            )
-        }
-    }
 }
 ```
 
-Use the `StudyPlannerApp` in `onCreate` method.
+2. Create the **navigation controller**. A navigation controller lets the app move between screens, return to a previous screen, and manage the navigation back stack. Add this inside `StudyPlannerApp`:
 
-Here's the explanation of the code:
-
-`StudyPlannerApp` is the main screen container for the app. It creates the navigation system and holds the shared task list. It is the root composable that owns the app state, configures the navigation graph, and connects the home screen and detail screen together.
-
-It does three important things:
-
-1. creates a `NavController`
-2. keeps the list of tasks in state
-3. defines the screens and how they navigate
-
----
-
-## Navigation controller
-
-```kotlin
+```kotlin 
 val navController = rememberNavController()
 ```
 
-This gives the app a navigation object that can:
-- move to another screen
-- go back
-- manage the current screen stack
+3. Create the shared task state. Add this inside `StudyPlannerApp`, after the navigation controller:
 
----
-
-## Shared task state
-
-```kotlin
+```kotlin 
 var tasks by remember {
     mutableStateOf(
         listOf(
@@ -134,31 +56,23 @@ var tasks by remember {
 }
 ```
 
-This creates the app’s data model for the task list.
+First, we added three sample tasks and stored the list in Compose state. Assigning an updated list to `tasks` lets the UI reflect the changes. `remember` keeps this state across recompositions; it does not permanently save the tasks.
 
-It is stored in Compose state, which means when a task is updated, the UI refreshes automatically.
+4. Add the **navigation host**. Add this inside `StudyPlannerApp`, after the task state:
 
----
-
-## Navigation graph
-
-```kotlin
+```kotlin 
 NavHost(
     navController = navController,
     startDestination = "home"
-)
+) {
+}
 ```
 
-This is the root of the navigation system.
+`NavHost` contains the app’s screen destinations. Setting `startDestination` to `"home"` makes the home screen the first destination.
 
-- `startDestination = "home"` means the app opens the home screen first.
-- `NavHost` contains all the screens.
+5. Add the home screen destination. Add this inside `NavHost`:
 
----
-
-## Home screen route
-
-```kotlin
+```kotlin 
 composable("home") {
     HomeScreen(
         tasks = tasks,
@@ -171,31 +85,13 @@ composable("home") {
 }
 ```
 
-This says:
+* The `"home"` route displays `HomeScreen` with the shared task list.
+* Tapping a task navigates to its detail screen, passing its information: ID, title, completion status, and priority.
+* `Uri.encode` protects special characters in the title so they can be included in the route.
 
-- when the app is on the `"home"` route, show `HomeScreen`
-- pass the `tasks` list to it
-- when a task is clicked, navigate to the detail route with the selected task data
+6. Define the detail screen destination. Add this below the home destination:
 
-The route is built like this:
-
-```kotlin
-"taskDetail/${task.id}/${Uri.encode(task.title)}/${task.isCompleted}/${task.priority.name}"
-```
-
-This includes:
-- task ID
-- title
-- completion status
-- priority
-
-The title is encoded with `Uri.encode(...)` so spaces and special characters are safe in the URL route.
-
----
-
-## Detail screen route
-
-```kotlin
+```kotlin 
 composable(
     route = "taskDetail/{taskId}/{title}/{isCompleted}/{priority}",
     arguments = listOf(
@@ -205,32 +101,35 @@ composable(
         navArgument("priority") { type = NavType.StringType }
     )
 ) { backStackEntry ->
+}
 ```
 
-This defines the detail screen route and tells Compose what type each argument is.
+* The placeholders in the route describe the values this destination receives.
+* Each `navArgument` specifies the corresponding Kotlin-compatible type.
+* `backStackEntry` gives access to the arguments passed when navigating to this destination.
 
-The app passes:
-- `Int` for the task ID,
-- `String` for the task title,
-- `Boolean` for completion status,
-- `String` for the priority.
+7. Read the navigation arguments. Add this inside the detail destination’s `backStackEntry ->` block.
 
-Navigation is not only moving between screens; it is also transferring data.
-
-Then it reads them:
-
-```kotlin
+```kotlin 
 val taskId = backStackEntry.arguments?.getInt("taskId") ?: 0
 val title = backStackEntry.arguments?.getString("title") ?: ""
 val isCompleted = backStackEntry.arguments?.getBoolean("isCompleted") ?: false
 val priority = backStackEntry.arguments?.getString("priority") ?: "MEDIUM"
 ```
 
-This converts the route values back into real Kotlin variables.
+* These lines read the arguments into variables that can be passed to `TaskDetailScreen`.
+* The `?:` operator supplies a fallback value if the expression on its left is `null`.
 
-Then it displays the detail screen:
+8. Display the detail screen and connect its callbacks. 
 
-```kotlin
+We will pass the selected task’s information to `TaskDetailScreen` and connect its two actions:
+
+- **Back:** Using `popBackStack()`, it will be possible to return to the previous destination.
+- **Toggle:** We will use `map` to create a new task list. The matching task is copied with the new completion value, while the other tasks stay unchanged. Assigning the new list to `tasks` updates the shared state.
+
+Add this inside the same detail destination block, after the argument variables.
+
+```kotlin 
 TaskDetailScreen(
     taskId = taskId,
     title = title,
@@ -247,32 +146,6 @@ TaskDetailScreen(
         }
     }
 )
-```
-
-This is the main idea:
-
-- when the user taps a task, the app navigates with its data
-- the detail screen reads that data
-- when the task is toggled, the parent updates the shared `tasks` list
-
----
-
-## 3. Call the parent composable
-
-In `onCreate` set the `StudyPlannerApp` composable as the initial UI:
-
-```kotlin
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            StudyPlannerTheme {
-                StudyPlannerApp()
-            }
-        }
-    }
-}
 ```
 
 [Previous: Detail Screen](03-detail-screen.md) | [Next: Demo](05-demo.md)
