@@ -4,9 +4,13 @@
 
 ## 1. Create the detail screen
 
+<img width="521" height="580" alt="Screenshot 2026-10-09 at 5 09 24" src="https://github.com/user-attachments/assets/b722702d-6f7e-4348-8ec6-9515173e235a" />
+
 A detail screen receives data and shows it, so the user can see the task and update it directly.
 
-Add the following composable in `MainActivity.kt`:
+1. Create the composable function for a new screen. This screen receives the selected task’s details and callbacks will be included so we can modify the completion change or request navigation back.
+
+Add this below your existing composable functions in `MainActivity.kt`:
 
 ```kotlin
 @Composable
@@ -18,95 +22,99 @@ fun TaskDetailScreen(
     onBack: () -> Unit,
     onToggle: (Boolean) -> Unit
 ) {
-    var completed by remember { mutableStateOf(isCompleted) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "Task details",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Text("ID: $taskId")
-        Text("Title: $title")
-        Text("Completed: ${if (completed) "Yes" else "No"}")
-        Text("Priority: $priority")
-
-        Button(
-            onClick = {
-                completed = !completed
-                onToggle(completed)
-            }
-        ) {
-            Text(if (completed) "Mark as pending" else "Mark as completed")
-        }
-
-        OutlinedButton(onClick = onBack) {
-            Text("Back")
-        }
-    }
 }
 ```
 
-Resolve the following missing references: `remember`, `mutableStateOf`, `getValue`, `setValue`, `Button`, `OutlinedButton`.
+--- 
 
-## TaskDetailScreen purpose
-
-`TaskDetailScreen` is the screen that shows the selected task in more detail.
-
-It receives several arguments:
-
-- `taskId: Int`
-- `title: String`
-- `isCompleted: Boolean`
-- `priority: String`
-- `onBack: () -> Unit`
-- `onToggle: (Boolean) -> Unit`
-
-This means that this screen is not holding the whole app state. It just receives the values it needs and reports changes back to the parent.
-
-Once the information about one task is displayed, the user can:
-
-- see the task details
-- toggle its completion state
-- go back to the previous screen
-
-## State
+2. Create the local completion state. Add this inside `TaskDetailScreen`:
 
 ```kotlin
 var completed by remember { mutableStateOf(isCompleted) }
 ```
 
-Above code is really important! It creates a local state variable named `completed`.
+* `isCompleted` supplies the initial value.
+* `mutableStateOf` lets Compose observe changes
+* `remember` preserves the value across recompositions while this composable remains in the composition.
 
-- An incoming `isCompleted` is just the initial value from navigation.
-- The screen may change it while the user taps the button.
-- `remember` keeps this value while the screen stays on the screen.
+---
 
-So the UI updates immediately without reloading the whole app.
+3. Add the main `Column` layout just below after the state variable still inside `TaskDetailScreen`:
 
-## Task details
+```kotlin 
+Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(24.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp)
+) {
+}
+```
 
-The task details are represented with 4 `Text` elements inside a `Column` layout for the task ID, task title, whether it is completed, and its priority.
+---
 
-The screen reflects the latest value after clicking the button (`isCompleted`).
+4. Add the screen heading inside `Column`:
 
-## Toggle button
+```kotlin 
+Text(
+    text = "Task details",
+    style = MaterialTheme.typography.headlineMedium
+)
+```
 
-Moreover, the `Button` element has a toggle behavior. When the user taps the button:
+---
 
-1. the local state flips
-2. the UI updates
-3. the new value is sent to `onToggle`
+5. Display the task details after the heading still inside `Column`:
 
-This callback then updates the task list in the parent screen.
+```kotlin 
+Text("ID: $taskId")
+Text("Title: $title")
+Text("Completed: ${if (completed) "Yes" else "No"}")
+Text("Priority: $priority")
+```
 
-## Back button
+The completion text uses the local `completed` state, so it reflects changes made with a toggle button.
 
-The `OutlinedButton` element calls `onBack` which will take the user back to the previous screen.
+---
+
+6. Add the toggle button below the task details:
+
+```kotlin 
+Button(
+    onClick = {
+        completed = !completed
+        onToggle(completed)
+    }
+) {
+    Text(if (completed) "Mark as pending" else "Mark as completed")
+}
+```
+
+Check the `onClick` code for the button. Tapping the button reverses the completion state and sends the new value to the parent through `onToggle`. The button label describes the next available action.
+
+---
+
+7. Add a back button below the previous toggle button. It calls `onBack` when tapped. 
+
+```kotlin 
+OutlinedButton(onClick = onBack) {
+    Text("Back")
+}
+```
+
+---
+
+8. Add the missing imports:
+
+```kotlin 
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+```
+
+`getValue` and `setValue` support reading and updating the state using the `by` syntax.
 
 [Previous: Home Screen](02-home-screen.md) | [Next: Pass Arguments](04-navigation.md)
