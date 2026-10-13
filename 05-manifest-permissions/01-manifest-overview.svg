@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520">
+  <rect width="960" height="520" fill="#F5F7FB"/>
+  <text x="480" y="50" text-anchor="middle" font-size="30" font-family="Arial" font-weight="700" fill="#1F2937">AndroidManifest.xml</text>
+
+  <rect x="120" y="100" width="220" height="300" rx="18" fill="#E0F2FE" stroke="#0284C7" stroke-width="3"/>
+  <text x="230" y="140" text-anchor="middle" font-size="26" font-family="Arial" font-weight="700" fill="#0F172A">App</text>
+  <text x="230" y="185" text-anchor="middle" font-size="20" font-family="Arial" fill="#0F172A">Package name</text>
+  <text x="230" y="220" text-anchor="middle" font-size="20" font-family="Arial" fill="#0F172A">Activities</text>
+  <text x="230" y="255" text-anchor="middle" font-size="20" font-family="Arial" fill="#0F172A">Permissions</text>
+  <text x="230" y="290" text-anchor="middle" font-size="20" font-family="Arial" fill="#0F172A">Theme</text>
+  <text x="230" y="325" text-anchor="middle" font-size="20" font-family="Arial" fill="#0F172A">Icon</text>
+  <text x="230" y="360" text-anchor="middle" font-size="20" font-family="Arial" fill="#0F172A">Launchers</text>
+
+  <path d="M340 250 L620 250" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="620" y="120" width="220" height="260" rx="18" fill="#DCFCE7" stroke="#16A34A" stroke-width="3"/>
+  <text x="730" y="160" text-anchor="middle" font-size="26" font-family="Arial" font-weight="700" fill="#14532D">Android</text>
+  <text x="730" y="205" text-anchor="middle" font-size="20" font-family="Arial" fill="#14532D">Reads manifest</text>
+  <text x="730" y="240" text-anchor="middle" font-size="20" font-family="Arial" fill="#14532D">Installs app</text>
+  <text x="730" y="275" text-anchor="middle" font-size="20" font-family="Arial" fill="#14532D">Starts activity</text>
+  <text x="730" y="310" text-anchor="middle" font-size="20" font-family="Arial" fill="#14532D">Checks permissions</text>
+  <text x="730" y="345" text-anchor="middle" font-size="20" font-family="Arial" fill="#14532D">Configures app</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+</svg>
