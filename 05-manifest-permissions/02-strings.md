@@ -30,6 +30,8 @@ Replace its current content with the following information:
     <string name="message_hint">Message</string>
     <string name="send_sms">Send SMS</string>
     <string name="make_call">Call</string>
+    <string name="sms_permission_error">SMS permission denied</string>
+    <string name="call_permission_error">Call permission denied</string>
 </resources>
 ```
 
@@ -51,6 +53,8 @@ And add the following content:
     <string name="message_hint">Mensaje</string>
     <string name="send_sms">Enviar SMS</string>
     <string name="make_call">Llamar</string>
+    <string name="sms_permission_error">Permiso de SMS denegado</string>
+    <string name="call_permission_error">Permiso de Llamada denegado</string>
 </resources>
 ```
 
