@@ -10,10 +10,12 @@ Add the required permissions for sending SMS and making a phone call.
 
 ## 1. Add permission entries
 
-The manifest still declares the permission the app needs. Add the permission lines before the `<application>` block:
+The manifest still declares the permission the app needs. Add the feature and permission lines before the `<application>` block:
 
 ```xml
 <manifest ...>
+
+    <uses-feature android:name="android.hardware.telephony"/>
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -23,6 +25,8 @@ The manifest still declares the permission the app needs. Add the permission lin
 ```
 
 This tells Android that the app may need permission to send SMS and place a call.
+
+**NOTE:** For both `SEND_SMS` and `CALL_PHONE` permissions, you need to include the `android.hardware.telephony` feature.
 
 ---
 
@@ -60,7 +64,9 @@ This is important because Android protects user privacy and security.
 
 ## 4. Runtime request example
 
-Use `ActivityResultContracts.RequestPermission` to ask the user at runtime:
+Use `ActivityResultContracts.RequestPermission` to ask the user at runtime.
+
+Add the following method INSIDE `MainActivity.kt` class (below `onCreate` for example):
 
 ```kotlin
 private val requestSmsPermissionLauncher = registerForActivityResult(
@@ -74,7 +80,9 @@ private val requestSmsPermissionLauncher = registerForActivityResult(
 }
 ```
 
-Then, before sending a message, check the current state:
+Don't forget to import the packages above code needs.
+
+Then, before sending a message, check the current state by adding the following method (also inside the class):
 
 ```kotlin
 private fun requestSmsPermission(phone: String, message: String) {
@@ -92,7 +100,9 @@ private fun requestSmsPermission(phone: String, message: String) {
 }
 ```
 
-The same idea works for making a call:
+Don't forget to import the packages above code needs. You will get an error for `sendSms` because we have not defined the function yet.
+
+The same idea works for making a phone call:
 
 ```kotlin
 private val requestCallPermissionLauncher = registerForActivityResult(
@@ -119,6 +129,8 @@ private fun requestCallPermission(phone: String) {
     }
 }
 ```
+
+You will get an error for `callPhone` because the method has yet to be implemented.
 
 ---
 
