@@ -66,7 +66,7 @@ This is important because Android protects user privacy and security.
 
 Use `ActivityResultContracts.RequestPermission` to ask the user at runtime.
 
-Add the following method INSIDE `MainActivity.kt` class (below `onCreate` for example):
+Add the following method INSIDE `MainActivity.kt` class (below `onCreate` for example) to register a permission request for SMS:
 
 ```kotlin
 private val requestSmsPermissionLauncher = registerForActivityResult(
@@ -75,10 +75,16 @@ private val requestSmsPermissionLauncher = registerForActivityResult(
     if (isGranted) {
         // send SMS
     } else {
-        Toast.makeText(this, R.string.sms_permission_error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.sms_permission_error), Toast.LENGTH_SHORT).show()
     }
 }
 ```
+
+* `registerForActivityResult(...)` creates a launcher.
+* `RequestPermission()` asks Android for one permission.
+* `isGranted` tells us whether the user accepted.
+* If accepted, the app calls `sendSms(...)`.
+* If denied, it shows a `Toast` message.
 
 Don't forget to import the packages above code needs.
 
@@ -111,7 +117,7 @@ private val requestCallPermissionLauncher = registerForActivityResult(
     if (isGranted) {
         // call phone
     } else {
-        Toast.makeText(this, R.string.call_permission_error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.call_permission_error), Toast.LENGTH_SHORT).show()
     }
 }
 
