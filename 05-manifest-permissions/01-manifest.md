@@ -33,7 +33,7 @@ The manifest tells Android important details such as:
 - the app label and icon,
 - the theme and app configuration.
 
-![Manifest overview](assets/01-manifest-overview.svg)
+![Manifest overview](01-manifest-overview.svg)
 
 A simple example looks like this:
 
