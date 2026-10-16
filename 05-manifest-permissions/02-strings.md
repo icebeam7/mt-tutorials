@@ -37,13 +37,9 @@ Replace its current content with the following information:
 
 ## 3. Add Spanish support
 
-Create a folder:
+Create an Android Resource Directory named `values-es` under `res`.
 
-```text
-res/values-es/
-```
-
-Then create a file `strings.xml` inside the folder:
+Then create a file `strings.xml` inside the folder.
 
 And add the following content:
 
@@ -64,13 +60,7 @@ Now Android can automatically use the correct text based on the device language.
 
 ## 4. Connect the manifest to strings
 
-In the manifest, use:
-
-```xml
-android:label="@string/app_name"
-```
-
-This means the app title comes from the string resource instead of being hardcoded.
+Open `AndroidManifest.xml`. Make sure `android:label` is set to `@string/app_name`. This means the app title comes from the string resource instead of being hardcoded.
 
 Example:
 
@@ -84,7 +74,59 @@ This is a good practice because the same app can show English or Spanish without
 
 ---
 
-## 5. Importance
+## 5 Change Language Settings
+
+Launch the emulator or use your device.
+
+Open **Settings** app
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/309818da-3152-44c2-a24e-baabfff3fcce" />
+
+Tap on **System**
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/8dc3edcb-2f95-424f-8ae5-6b1e1eb8e33a" />
+
+Click on **Language & region**
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/4a61f084-54e8-4180-a70f-bc10af02d3b0" />
+
+Select **Add a language** and find **Español**
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/d8b9e672-ae53-4720-84fa-57d3b9710d0f" />
+
+Choose any **region** (for example, Mexico)
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/873e707a-8af4-4435-92d3-5e6cb4b58f8e" />
+
+Tap on the three dots of the newly added language and select **Move to top**
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/d4bb670f-5762-4dbf-9364-35ba67e059e8" />
+
+Select **Change**:
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/75227b18-8ae6-4444-b8f6-478d216d955f" />
+
+The device is now in Spanish:
+
+<img width="554" height="1196" alt="image" src="https://github.com/user-attachments/assets/d1bc1845-d3b7-4269-823d-c9edac68d86e" />
+
+---
+
+## 6. Launch the app
+
+Launch the app.
+
+Press the Home button.
+
+You will see the app name is "Demo de Permisos" (title in Spanish language)
+
+<img width="554" height="1106" alt="image" src="https://github.com/user-attachments/assets/7b10182b-e84e-4fee-92b0-4848acb66ffd" />
+
+Stop the app.
+
+---
+
+## 7. Importance
 
 When an app supports more than one language:
 
