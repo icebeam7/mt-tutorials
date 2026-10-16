@@ -69,15 +69,15 @@ Use `ActivityResultContracts.RequestPermission` to ask the user at runtime.
 Add the following method INSIDE `MainActivity.kt` class (below `onCreate` for example) to register a permission request for SMS:
 
 ```kotlin
-private val requestSmsPermissionLauncher = registerForActivityResult(
-    ActivityResultContracts.RequestPermission()
-) { isGranted ->
-    if (isGranted) {
-        // send SMS
-    } else {
-        Toast.makeText(this, getString(R.string.sms_permission_error), Toast.LENGTH_SHORT).show()
+    private val requestSmsPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            sendSms(pendingPhone, pendingMessage)
+        } else {
+            Toast.makeText(this, getString(R.string.sms_permission_error), Toast.LENGTH_SHORT).show()
+        }
     }
-}
 ```
 
 * `registerForActivityResult(...)` creates a launcher.
@@ -88,55 +88,63 @@ private val requestSmsPermissionLauncher = registerForActivityResult(
 
 Don't forget to import the packages above code needs.
 
-Then, before sending a message, check the current state by adding the following method (also inside the class):
+Then, before sending a message, check the current permission state by adding the following method (also inside the class):
 
 ```kotlin
-private fun requestSmsPermission(phone: String, message: String) {
-    when {
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.SEND_SMS
-        ) == PackageManager.PERMISSION_GRANTED -> {
-            sendSms(phone, message)
-        }
-        else -> {
-            requestSmsPermissionLauncher.launch(Manifest.permission.SEND_SMS)
+    private fun requestSmsPermission(phoneNumber: String, messageText: String) {
+        pendingPhone = phoneNumber
+        pendingMessage = messageText
+    
+        when {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_GRANTED -> {
+                sendSms(phoneNumber, messageText)
+            }
+            else -> {
+                requestSmsPermissionLauncher.launch(Manifest.permission.SEND_SMS)
+            }
         }
     }
-}
 ```
 
-Don't forget to import the packages above code needs. You will get an error for `sendSms` because we have not defined the function yet.
+This function does the main permission check:
 
-The same idea works for making a phone call:
+* save the values into `pendingPhone` and `pendingMessage`
+* ask Android whether `SEND_SMS` is already granted
+* if it is granted, call `sendSms(...)`
+* if not, launch the permission dialog
+
+Don't forget to import the packages that previous code blocks need. You will get an error for `sendSms` because we have not defined the function yet, and also for the `pendingPhone` and `pendingMessage` variables.
+
+The same pattern is used for call permission:
 
 ```kotlin
-private val requestCallPermissionLauncher = registerForActivityResult(
-    ActivityResultContracts.RequestPermission()
-) { isGranted ->
-    if (isGranted) {
-        // call phone
-    } else {
-        Toast.makeText(this, getString(R.string.call_permission_error), Toast.LENGTH_SHORT).show()
+    private val requestCallPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            callPhone(pendingPhone)
+        } else {
+            Toast.makeText(this, getString(R.string.call_permission_error), Toast.LENGTH_SHORT).show()
+        }
     }
-}
 
-private fun requestCallPermission(phone: String) {
-    when {
-        ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CALL_PHONE
-        ) == PackageManager.PERMISSION_GRANTED -> {
-            callPhone(phone)
-        }
-        else -> {
-            requestCallPermissionLauncher.launch(Manifest.permission.CALL_PHONE)
+    private fun requestCallPermission(phoneNumber: String) {
+        pendingPhone = phoneNumber
+    
+        when {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                    == PackageManager.PERMISSION_GRANTED -> {
+                callPhone(phoneNumber)
+            }
+            else -> {
+                requestCallPermissionLauncher.launch(Manifest.permission.CALL_PHONE)
+            }
         }
     }
-}
 ```
 
-You will get an error for `callPhone` because the method has yet to be implemented.
+You will get an error for `callPhone` because the method has yet to be implemented, and the same goes for the `pendingPhone` variable.
 
 ---
 
