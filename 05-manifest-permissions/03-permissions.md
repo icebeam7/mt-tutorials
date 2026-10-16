@@ -75,7 +75,7 @@ private val requestSmsPermissionLauncher = registerForActivityResult(
     if (isGranted) {
         // send SMS
     } else {
-        Toast.makeText(this, "SMS permission denied", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.sms_permission_error, Toast.LENGTH_SHORT).show()
     }
 }
 ```
@@ -111,7 +111,7 @@ private val requestCallPermissionLauncher = registerForActivityResult(
     if (isGranted) {
         // call phone
     } else {
-        Toast.makeText(this, "Call permission denied", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.call_permission_error, Toast.LENGTH_SHORT).show()
     }
 }
 
