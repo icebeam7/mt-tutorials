@@ -6,23 +6,25 @@ This section uses Google Maps for Compose.
 
 ## 1. Add the required dependencies and set up an API Key
 
-In your app-level `build.gradle.kts` file, add:
+In your Module app-level `build.gradle.kts` file, add the following dependencies in the `dependencies` section:
 
 ```kotlin
-dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.google.maps.android:maps-compose:6.4.1")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-}
 ```
 
-Also, make sure you add your Google Maps API key in `AndroidManifest.xml` inside the `<application>` element:
+Synchronize the Gradle project.
+
+Also, make sure you set a **Google Maps API key** in the Android Manifest inside the `<application>` element:
 
 ```xml
 <meta-data
     android:name="com.google.android.geo.API_KEY"
     android:value="YOUR_API_KEY" />
 ```
+
+Replace the `YOUR_API_KEY` placeholder with the actual **Google Maps API Key**.
 
 See below links for obtaining an API KEY:
 
@@ -33,9 +35,15 @@ See below links for obtaining an API KEY:
 
 - A Standard Key requires full billing setup (Google Cloud Billing and entering a valid credit card), but is necessary for production applications. It has a Free tier, so if usage is low, you will not get charged.
 
+For this assignment, obtain a **Maps Demo Key**. Accept the terms to generate your Maps Demo Key.
+
+<img width="1012" height="291" alt="image" src="https://github.com/user-attachments/assets/fbdf050b-2a57-44c1-9f19-9ac1d5bab652" />
+
 ### IMPORTANT: 
 
-DO NOT COMMIT YOUR API KEY!!!
+- DO NOT COMMIT YOUR API KEY!!!
+
+- Moreover, this is not the safest approach. In a later exercise, we will explore **secrets** to protect sensitive information.
 
 ## 2. Use the user's location
 
