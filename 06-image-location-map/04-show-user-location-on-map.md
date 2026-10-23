@@ -246,6 +246,11 @@ If you are using the emulator, set the device location to any desired place with
 
 <img width="518" height="1092" alt="image" src="https://github.com/user-attachments/assets/ac9d502e-7704-4642-82fa-2707c6330b7b" />
 
+If the app does not load, try adding the INTERNET permission in the Android Manifest:
+
+```xml
+    <uses-permission android:name="android.permission.INTERNET" />
+```
 
 ## 3. Summary
 
