@@ -4,6 +4,8 @@ Once the app receives the user's permission, we can do more than show a message.
 
 This section uses Google Maps for Compose.
 
+**IMPORTANT**: If you are using an Android Emulaotr 
+
 ## 1. Add the required dependencies and set up an API Key
 
 In your Module app-level `build.gradle.kts` file, add the following dependencies in the `dependencies` section:
@@ -41,7 +43,7 @@ For this assignment, obtain a **Maps Demo Key**. Accept the terms to generate yo
 
 ### IMPORTANT: 
 
-- DO NOT COMMIT YOUR API KEY!!!
+- DO NOT COMMIT YOUR API KEY!!! (Remove it before submitting the assignment)
 
 - Moreover, this is not the safest approach. In a later exercise, we will explore **secrets** to protect sensitive information.
 
@@ -49,28 +51,21 @@ For this assignment, obtain a **Maps Demo Key**. Accept the terms to generate yo
 
 To get the device coordinates, we can use `FusedLocationProviderClient`. We will build it progressively so it is easier to understand.
 
-### Step 1: Start with the imports
+### Step 2.1: Start with the imports
 
 ```kotlin
-import android.Manifest
 import android.annotation.SuppressLint
 import android.location.Location
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 ```
 
-### Step 2: Create the Composable function
+### Step 2.2: Create the Composable function
 
 ```kotlin
-@SuppressLint("MissingPermission")
 @Composable
 fun UserLocationMapScreen(
     permissionGranted: Boolean
@@ -79,10 +74,9 @@ fun UserLocationMapScreen(
 }
 ```
 
-### Step 3: Add the variables for context and location state
+### Step 2.3: Add the variables for context and location state
 
 ```kotlin
-@SuppressLint("MissingPermission")
 @Composable
 fun UserLocationMapScreen(
     permissionGranted: Boolean
@@ -99,10 +93,9 @@ fun UserLocationMapScreen(
 }
 ```
 
-### Step 4: Request the last known location when permission is granted
+### Step 2.4: Request the last known location when permission is granted
 
 ```kotlin
-@SuppressLint("MissingPermission")
 @Composable
 fun UserLocationMapScreen(
     permissionGranted: Boolean
@@ -111,6 +104,7 @@ fun UserLocationMapScreen(
 
     LaunchedEffect(permissionGranted) {
         if (permissionGranted) {
+            @SuppressLint("MissingPermission")
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     val current = LatLng(it.latitude, it.longitude)
@@ -123,10 +117,9 @@ fun UserLocationMapScreen(
 }
 ```
 
-### Step 5: Display the map and the marker
+### Step 2.5: Display the map and the marker
 
 ```kotlin
-@SuppressLint("MissingPermission")
 @Composable
 fun UserLocationMapScreen(
     permissionGranted: Boolean
@@ -136,7 +129,7 @@ fun UserLocationMapScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(top = 12.dp)
     ) {
         Text(text = "Your current location")
 
@@ -158,6 +151,105 @@ fun UserLocationMapScreen(
     }
 }
 ```
+
+### Step 2.6: Modify `ScreenWithCard`:
+
+Move permission state up into `ScreenWithCard()` to conditionally show: 
+
+- Permission UI when not granted
+- `UserLocationMapScreen(permissionGranted = true)` when granted.
+
+We will set `hasPermission` and add a validation after `PermissionCard` instead of just invoking `LocationPermissionExample`:
+
+```kotlin
+@Composable
+fun ScreenWithCard() {
+    var hasPermission by remember { mutableStateOf(false) }
+
+    Column(
+        // ...
+    ) {
+        // LocationPermissionExample()
+
+        if (hasPermission) {
+            UserLocationMapScreen(permissionGranted = true)
+        } else {
+            LocationPermissionExample(
+                onPermissionResult = { granted -> hasPermission = granted }
+            )
+        }
+    }
+}
+```
+
+### Step 2.7: Modify `LocationPermissionExample`:
+
+Now, update `LocationPermissionExample` to expose callback:
+
+```kotlin
+@Composable
+fun LocationPermissionExample(
+    onPermissionResult: (Boolean) -> Unit
+) {
+  // ...
+}
+```
+
+Inside permission result set `hasPermission` and keep parent in sync if already granted at startup by invoking `LaunchedEffect`:
+
+```kotlin
+@Composable
+fun LocationPermissionExample(
+    onPermissionResult: (Boolean) -> Unit
+) {
+    val context = // ...
+
+    var hasPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    LaunchedEffect(hasPermission) {
+        onPermissionResult(hasPermission)
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        hasPermission = granted
+        onPermissionResult(granted)
+
+        // ...
+
+        Button(
+            onClick = {
+                val isGranted = // ...
+
+                if (isGranted) {
+                    hasPermission = true
+                    onPermissionResult(true)
+                } else {
+                    // ...
+                }
+            }
+        ) {
+            // ...
+        }
+    }
+}
+```
+
+### Step 2.8: Set emulator location
+
+If you are using the emulator, set the device location to any desired place with the **Extended controls**:
+
+<img width="2262" height="1346" alt="image" src="https://github.com/user-attachments/assets/54beee2d-2596-41be-8d4e-9e769433cd6d" />
+
+### Step 2.9: Build and run your app
 
 ## 3. Summary
 
