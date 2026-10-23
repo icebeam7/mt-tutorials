@@ -42,9 +42,9 @@ Some information about these permissions:
 
 In Kotlin, we build the example step by step. The goal is to make the flow clear and easier to understand.
 
-### Step 1: Add the necessary imports
+### Step 2.1: Add the necessary imports
 
-First, include the imports you need.
+First, include the new imports you need.
 
 ```kotlin
 import android.Manifest
@@ -52,18 +52,14 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 ```
 
-### Step 2: Create the Composable function
+### Step 2.2: Create the Composable function
 
 Now declare the function that will display the screen.
 
@@ -74,7 +70,7 @@ fun LocationPermissionExample() {
 }
 ```
 
-### Step 3: Add the variables
+### Step 2.3: Add the variables
 
 Inside the composable, define the context and the permission state.
 
@@ -87,7 +83,7 @@ fun LocationPermissionExample() {
 }
 ```
 
-### Step 4: Create the permission launcher
+### Step 2.4: Create the permission launcher
 
 Use `rememberLauncherForActivityResult` to handle the result after the user chooses Accept or Deny.
 
@@ -101,15 +97,20 @@ fun LocationPermissionExample() {
     ) { granted ->
         hasPermission = granted
         if (granted) {
-            Toast.makeText(context, "Location access granted", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.location_granted),
+                Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(context, "Location access denied", Toast.LENGTH_LONG).show()
+            Toast.makeText(context,
+                context.getString(R.string.location_denied),
+                Toast.LENGTH_LONG).show()
         }
     }
 }
 ```
 
-### Step 5: Add the UI layout
+### Step 2.5: Add the UI layout
 
 Now create the visual structure: a text indicator and a button stacked vertically.
 
@@ -123,7 +124,7 @@ fun LocationPermissionExample() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = if (hasPermission) "Location enabled" else "Location disabled")
+        Text(text = if (hasPermission) stringResource(R.string.location_granted) else stringResource(R.string.location_denied))
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -132,26 +133,19 @@ fun LocationPermissionExample() {
                 // request permission here
             }
         ) {
-            Text("Enable location")
+            Text(stringResource(R.string.permission_button))
         }
     }
 }
 ```
 
-### Step 6: Check permission and request it
+### Step 2.6: Check permission and request it
 
 Finally, add the logic that checks whether the permission is already granted or needs to be requested.
 
+Replace the `Button` element added at the end of the previous step with the following implementation:
+
 ```kotlin
-@Composable
-fun LocationPermissionExample() {
-    // ... 
-
-    Column(
-        ...
-    ) {
-        // ... 
-
         Button(
             onClick = {
                 val isGranted = ContextCompat.checkSelfPermission(
@@ -168,9 +162,40 @@ fun LocationPermissionExample() {
         ) {
             Text("Enable location")
         }
+```
+
+### Step 2.7: Update the UI
+
+Go to your `ScreenWithCard` composable and replace the `Button` at the end of the function with `LocationPermissionExample`, just below the `PermissionCard()` composable:
+
+```kotlin
+@Composable
+fun ScreenWithCard() {
+    Column(
+        //...
+    ) {
+        //...
+        PermissionCard()
+
+        LocationPermissionExample()
     }
 }
 ```
+
+### Step 2.8: Build and run your app
+
+Build and run your app. This is the initial UI:
+
+<img width="548" height="988" alt="image" src="https://github.com/user-attachments/assets/94a9394b-2b6b-4a9d-93e5-3dc29ad9d860" />
+
+Click the button:
+
+<img width="458" height="1018" alt="image" src="https://github.com/user-attachments/assets/3ad89b72-ee33-47a7-b874-47b723d036a4" />
+
+Select **While using the app**:
+
+<img width="458" height="1018" alt="image" src="https://github.com/user-attachments/assets/35f7cb63-ce6d-40e1-bd66-082a3a03679f" />
+
 
 ## 3. Behavior when the user accepts or denies
 
