@@ -64,6 +64,11 @@ fun ResourceExample() {
 
 Don't forget to use `ResourceExample` in `onCreate`.
 
+Build and run your app:
+
+<img width="298" height="584" alt="Screenshot 2026-10-23 at 10 52 05" src="https://github.com/user-attachments/assets/a095a48c-d699-4b8f-8967-a35b7625708e" />
+
+
 ## 4. Best practices
 
 - Keep file names in lowercase and use underscores: `geolocation.png`.
