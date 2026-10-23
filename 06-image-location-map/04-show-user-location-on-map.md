@@ -28,22 +28,15 @@ Also, make sure you set a **Google Maps API key** in the Android Manifest inside
 
 Replace the `YOUR_API_KEY` placeholder with the actual **Google Maps API Key**.
 
-See below links for obtaining an API KEY:
+* You can find a Google Maps API Key in Moodle (**Task 06. Images, Geolocation, and Map**)
 
-* [Get a Maps Demo Key](https://developers.google.com/maps/demo-key)
-* [Set up Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
+* You can also create your own Standard API Key: [Set up Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
 
-- The Maps Demo Key is a no-cost feature that lets you start prototyping with Google Maps Platform without entering billing information. However, it has limits (for example, usage may be restricted to a limited number of calls per day). It is not intended for production apps.
-
-- A Standard Key requires full billing setup (Google Cloud Billing and entering a valid credit card), but is necessary for production applications. It has a Free tier, so if usage is low, you will not get charged.
-
-For this assignment, obtain a **Maps Demo Key**. Accept the terms to generate your Maps Demo Key.
-
-<img width="1012" height="291" alt="image" src="https://github.com/user-attachments/assets/fbdf050b-2a57-44c1-9f19-9ac1d5bab652" />
+    - A Standard Key requires full billing setup (Google Cloud Billing and entering a valid credit card), but is necessary for production applications. It has a Free tier, so if usage is low, you will not get charged.
 
 ### IMPORTANT: 
 
-- DO NOT COMMIT YOUR API KEY!!! (Remove it before submitting the assignment)
+- DO NOT COMMIT THIS API KEY!!! (Remove it before submitting the assignment)
 
 - Moreover, this is not the safest approach. In a later exercise, we will explore **secrets** to protect sensitive information.
 
@@ -250,6 +243,9 @@ If you are using the emulator, set the device location to any desired place with
 <img width="2262" height="1346" alt="image" src="https://github.com/user-attachments/assets/54beee2d-2596-41be-8d4e-9e769433cd6d" />
 
 ### Step 2.9: Build and run your app
+
+<img width="518" height="1092" alt="image" src="https://github.com/user-attachments/assets/ac9d502e-7704-4642-82fa-2707c6330b7b" />
+
 
 ## 3. Summary
 
