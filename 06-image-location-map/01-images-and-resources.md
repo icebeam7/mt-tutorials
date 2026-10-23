@@ -10,7 +10,15 @@ You can place files such as `.png`, `.jpg`, `.webp`, or `.xml` vector drawables 
 
 ## 1. Add an image to the project
 
-Add the `geolocation.png` image in the `drawable` folder.
+Add the `geolocation.png` image in the `drawable` folder:
+
+- Go to the top menu and select **View** > **Tool Windows** > **Resource Manager**.
+
+- Click the + (Add resources to the module) icon at the top left of the Resource Manager panel.
+
+- Select **Import Drawables**.
+
+- Browse your computer, select the `geolocation.png` file, and click **Open**.
 
 ## 2. Add string resources
 
@@ -26,7 +34,7 @@ And add the following entries:
 
 ```xml
 <resources>
-    <string name="app_name">Location Demo</string>
+    <string name="app_name">Image Location Demo</string>
     <string name="welcome_title">Find my location</string>
     <string name="welcome_description">Use your location to explore nearby places.</string>
     <string name="permission_button">Enable location</string>
@@ -42,10 +50,8 @@ To display an image from the drawable folder, use `painterResource` and `Image` 
 
 ```kotlin
 import androidx.compose.foundation.Image
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.R
+import com.example.imagelocationdemo.R
 
 @Composable
 fun ResourceExample() {
@@ -55,6 +61,8 @@ fun ResourceExample() {
     )
 }
 ```
+
+Don't forget to use `ResourceExample` in `onCreate`.
 
 ## 4. Best practices
 
