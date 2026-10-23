@@ -28,4 +28,8 @@ We will create a small screen that:
 - asks for the device location when the user taps a button,
 - shows the user’s current location on a map after permission is approved.
 
+## Step 0
+
+Create a project named `ImageLocationDemo`, leave the rest of options with their default values.
+
 [Start with Part 1](01-images-and-resources.md)
