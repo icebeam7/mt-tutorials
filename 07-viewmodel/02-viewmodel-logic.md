@@ -14,10 +14,12 @@ This is the main separation of concerns.
 
 ## Create the ViewModel file
 
-Create a new file named `CounterViewModel.kt`.
+Create a new package (`viewmodels`) inside the `com.example.counterhistoryapp` package. Then, create a Kotlin class named `CounterViewModel.kt` there.
+
+Here's the code:
 
 ```kotlin
-package com.example.counterhistoryapp
+package com.example.counterhistoryapp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue
