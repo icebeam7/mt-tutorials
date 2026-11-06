@@ -13,7 +13,21 @@ We want a screen that displays:
 
 We will use a `viewModel()` instance inside the composable.
 
+## Add a dependency
+
+Add the following dependency in `build.gradle.kts (Module :app)`.
+
+```
+implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
+```
+
+Don't forget to sync the project.
+
 ## Code: the screen UI
+
+### Step 1: Import the packages
+
+First, we import the **Compose** components and the **ViewModel APIs** we need to build the screen and manage state.
 
 ```kotlin
 package com.example.counterhistoryapp
@@ -35,16 +49,48 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.counterhistoryapp.viewmodels.CounterViewModel
+```
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            CounterHistoryApp()
-        }
-    }
+### Step 2: Create the Composable Screen
+
+2.1 Create a Composable screen named `CounterHistoryApp`:
+
+```kotlin
+@Composable
+fun CounterHistoryApp(
+) {
+
 }
+```
 
+2.2 This screen receives a ViewModel instance, so adapt the Composable accordingly:
+
+```kotlin
+@Composable
+fun CounterHistoryApp(
+    viewModel: CounterViewModel = viewModel()
+) {
+
+}
+```
+
+We are assigning a default parameter. If no value is passed in, Compose automatically creates one instance for you.
+
+2.3 Next, store the `count` property of the ViewModel in a local variable (`count`):
+
+```kotlin
+@Composable
+fun CounterHistoryApp(
+    viewModel: CounterViewModel = viewModel()
+) {
+    val count = viewModel.count
+}
+```
+
+2.4 Now, prepare a `Surface` as the main UI container:
+
+```kotlin
 @Composable
 fun CounterHistoryApp(
     viewModel: CounterViewModel = viewModel()
@@ -55,11 +101,81 @@ fun CounterHistoryApp(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+
+    }
+}
+```
+
+2.5 Include a  `Column` inside the `Surface`:
+
+```kotlin
+@Composable
+fun CounterHistoryApp(
+    viewModel: CounterViewModel = viewModel()
+) {
+    val count = viewModel.count
+
+    Surface(
+        ...
+    ) {
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+        }
+    }
+}
+```
+
+2.6 The `Column` will stack two elements. The first one is a `Text` that displays the counter:
+
+```kotlin
+@Composable
+fun CounterHistoryApp(
+    viewModel: CounterViewModel = viewModel()
+) {
+    val count = viewModel.count
+
+    Surface(
+        ...
+    ) {
+
+        Column(
+            ...
+        ) {
+
+            Text(
+                text = count.toString(),
+                style = MaterialTheme.typography.displayLarge
+            )
+
+
+
+        }
+    }
+}
+```
+
+2.7 The second element in the  `Column` is a `Row` element that displays buttons for each method in the ViewModel (increment, decrement, and reset):
+
+```kotlin
+@Composable
+fun CounterHistoryApp(
+    viewModel: CounterViewModel = viewModel()
+) {
+    val count = viewModel.count
+
+    Surface(
+        ...
+    ) {
+
+        Column(
+            ...
+        ) {
+
             Text(
                 text = count.toString(),
                 style = MaterialTheme.typography.displayLarge
@@ -81,6 +197,20 @@ fun CounterHistoryApp(
                     Text("+")
                 }
             }
+
+        }
+    }
+}
+```
+
+2.8 Finally, use the screen in the `onCreate` method:
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            CounterHistoryApp()
         }
     }
 }
@@ -88,7 +218,11 @@ fun CounterHistoryApp(
 
 This code displays the current state and lets the user interact with it.
 
-### Explanation
+### Build and Run the app
+
+See the app working
+
+### Summary
 
 - `CounterHistoryApp()` is a composable screen.
 - `viewModel()` creates or retrieves the same `CounterViewModel` instance for this screen.
