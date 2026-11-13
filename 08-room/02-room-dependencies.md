@@ -68,6 +68,12 @@ plugins {
 
 Click on the **Sync** hyperlink to download the plugins and dependencies so we can use them in our code.
 
+Then, build (or run) the app. If you get an error, add this line in `gradle.properties` file **at the end**:
+
+```kotlin
+android.disallowKotlinSourceSets=false
+```
+
 Now the project is ready to define the Room data layer.
 
 ---
