@@ -107,7 +107,7 @@ We now define the product fields that the user will edit.
 
 These values are stored in local Compose state and will later be converted into a Product instance
 
-The code for the local variables goes inside the `ProductDetailScreen` function, after setting `isNewProduct` and the `Column` that contains the UI.
+The code for the local variables goes inside the `ProductDetailScreen` function, between setting `isNewProduct` and the `Column` that contains the UI.
 
 ```kotlin
 @Composable
@@ -135,7 +135,45 @@ fun ProductDetailScreen(
 - `stock` is stored as a string until we convert it to `Int`
 - `category` and `description` are text fields
 
-## 6.4 Add the UI controls
+## 6.4 Load the selected product when the screen opens
+
+When the route is an existing product, we need to fetch that product from the database before filling the form.
+
+This is the missing step that makes the detail screen useful: the `productId` arrives in the route, and then the screen asks the ViewModel to load the matching entity.
+
+Add this inside `ProductDetailScreen` right after declaring the `category` variable:
+
+```kotlin
+    var category by // ...
+
+    val selectedProduct by viewModel.selectedProduct.collectAsState()
+
+    LaunchedEffect(productId) {
+        if (!isNewProduct) {
+            viewModel.loadProduct(productId)
+        }
+    }
+
+    LaunchedEffect(selectedProduct) {
+        if (!isNewProduct && selectedProduct != null) {
+            name = selectedProduct!!.name
+            price = selectedProduct!!.price.toString()
+            description = selectedProduct!!.description
+            stock = selectedProduct!!.stock.toString()
+            category = selectedProduct!!.category
+        }
+    }
+
+    Column(
+            // ...
+    ) {
+            // ...
+    }
+```
+
+This is what makes the screen populate the form with the current database values when the user opens an existing product.
+
+## 6.5 Add the UI controls
 
 Now we add the actual controls the user will interact with on the detail screen.
 
@@ -204,7 +242,7 @@ fun ProductDetailScreen(
 }
 ```
 
-## 6.5 Show the conditional buttons
+## 6.6 Show the conditional buttons
 
 Now we add the logic that decides which action buttons appear.
 
@@ -257,7 +295,7 @@ if (isNewProduct) {
 }
 ```
 
-## 6.6 Create the product object before saving
+## 6.7 Create the product object before saving
 
 Once the user has filled the form, we convert the current values into a `Product` object before calling the database methods.
 
@@ -280,7 +318,7 @@ This transforms the form state into a real entity to store in Room.
 - `id = productId` is used when editing an existing record.
 - `toDoubleOrNull()` and `toIntOrNull()` keep the app safe from invalid typing.
 
-## 6.7 Save, edit, and delete logic
+## 6.8 Save, edit, and delete logic
 
 Now we connect the button actions to the ViewModel and navigation. 
 
@@ -336,6 +374,15 @@ if (isNewProduct) {
 
         Button(
             onClick = {
+                val product = Product(
+                    id = productId,
+                    name = name,
+                    price = price.toDoubleOrNull() ?: 0.0,
+                    description = description,
+                    stock = stock.toIntOrNull() ?: 0,
+                    category = category
+                )
+
                 viewModel.deleteProduct(product)
                 navController.popBackStack()
             },
@@ -350,7 +397,7 @@ if (isNewProduct) {
 }
 ```
 
-## 6.8 Build and run the app
+## 6.9 Build and run the app
 
 Build the app, check if you can:
 
