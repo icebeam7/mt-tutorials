@@ -21,7 +21,7 @@ In the project-level `build.gradle.kts`, add the KSP plugin:
 plugins {
     id("com.android.application") version "8.7.2" apply false
     id("org.jetbrains.kotlin.android") version "2.0.21" apply false
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+    id("com.google.devtools.ksp") version "2.3.9" apply false
 }
 ```
 
@@ -46,9 +46,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    ksp("androidx.room:room-compiler:2.8.4")
 }
 ```
 
