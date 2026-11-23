@@ -22,6 +22,10 @@ class ProductRepository(private val productDao: ProductDao) {
 
     val allProducts: Flow<List<Product>> = productDao.getAllProducts()
 
+    fun getProductById(productId: Long): Flow<Product?> {
+        return productDao.getProductById(productId)
+    }
+
     fun searchProducts(query: String): Flow<List<Product>> {
         return productDao.searchByName(query)
     }
@@ -59,6 +63,9 @@ class ProductViewModel(
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    private val _selectedProduct = MutableStateFlow<Product?>(null)
+    val selectedProduct: StateFlow<Product?> = _selectedProduct.asStateFlow()
 
     val products: StateFlow<List<Product>> =
         _searchQuery
