@@ -42,6 +42,7 @@ Create a file named `ProductDao.kt`.
 We will include the following:
 
 - A `getAllProducts()` method that returns all rows as a `Flow`.
+- A `getProductById()` method that returns a specific product.
 - A `searchByName()` method that filters the list by product name.
 - An `insert()` method that saves a new record.
 - An `update()` method that edits an existing record.
@@ -57,6 +58,9 @@ interface ProductDao {
 
     @Query("SELECT * FROM products ORDER BY name ASC")
     fun getAllProducts(): Flow<List<Product>>
+
+    @Query("SELECT * FROM products WHERE id = :productId")
+    fun getProductById(productId: Long): Flow<Product?>
 
     @Query("SELECT * FROM products WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%' ORDER BY name ASC")
     fun searchByName(query: String): Flow<List<Product>>
