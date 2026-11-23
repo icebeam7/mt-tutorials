@@ -67,6 +67,15 @@ class ProductViewModel(
     private val _selectedProduct = MutableStateFlow<Product?>(null)
     val selectedProduct: StateFlow<Product?> = _selectedProduct.asStateFlow()
 
+    fun loadProduct(productId: Long) {
+        viewModelScope.launch {
+            repository.getProductById(productId)
+                .collect { product ->
+                    _selectedProduct.value = product
+                }
+        }
+    }
+
     val products: StateFlow<List<Product>> =
         _searchQuery
             .flatMapLatest { query ->
@@ -86,16 +95,22 @@ class ProductViewModel(
         _searchQuery.value = value
     }
 
-    suspend fun addProduct(product: Product) {
-        repository.insertProduct(product)
+    fun addProduct(product: Product) {
+        viewModelScope.launch {
+            repository.insertProduct(product)
+        }
     }
 
-    suspend fun editProduct(product: Product) {
-        repository.updateProduct(product)
+    fun editProduct(product: Product) {
+        viewModelScope.launch {
+            repository.updateProduct(product)
+        }
     }
 
-    suspend fun deleteProduct(product: Product) {
-        repository.deleteProduct(product)
+    fun deleteProduct(product: Product) {
+        viewModelScope.launch {
+            repository.deleteProduct(product)
+        }
     }
 }
 ```
