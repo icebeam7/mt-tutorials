@@ -57,14 +57,15 @@ class ReviewRepository {
         }
     }
 
-    suspend fun updateReview(id: Int, review: Review): Review? {
+    suspend fun updateReview(id: Int, review: Review): Boolean {
         try {
-            val response = api.updateReview(id, review)
-            return response
+            api.updateReview(id, review)
+            return true
         } catch(e: HttpException) {
-            return null
+            Log.e("ErrorReviewRepo",e.toString())
+            return false
         } catch (e: IOException) {
-            return null
+            return false
         }
     }
 
