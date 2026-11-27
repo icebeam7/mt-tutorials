@@ -19,26 +19,23 @@ Then open the module-level `build.gradle.kts` file and add these dependencies:
 
 ```kotlin
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
-    implementation("androidx.activity:activity-compose:1.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
 
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2025.01.00"))
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 }
 ```
+
+Also, in the same file, add the following element in `plugins` section:
+
+```kotlin
+plugins {
+    kotlin("plugin.serialization") version 2.x.x // use your Kotlin version, see libs.versions.toml
+}
+```
+
+Sync the project.
 
 ## 1.3 Add internet permission
 
@@ -55,6 +52,22 @@ This is required so the app can reach the API.
 We will prepare the main app structure so that the next sections can add the network layer and the review screen.
 
 ```kotlin
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+
+// ...
+
+@Composable
+fun ReviewApp() {
+    Surface(color = MaterialTheme.colorScheme.background) {
+        Text("Reviews app")
+    }
+}
+```
+
+Use the Composable in `onCreate`:
+
+```kotlin
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,15 +78,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-```
 
-```kotlin
-@Composable
-fun ReviewApp() {
-    Surface(color = MaterialTheme.colorScheme.background) {
-        Text("Reviews app")
-    }
-}
 ```
 
 ## 1.5 Build and run
