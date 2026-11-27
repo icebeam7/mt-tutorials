@@ -20,9 +20,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import com.example.reviewsapp.data.repository.ReviewRepository
 import com.example.reviewsapp.ui.screen.reviewform.ReviewFormScreen
 import com.example.reviewsapp.ui.screen.reviewlist.ReviewListScreen
+import com.example.reviewsapp.ui.viewmodel.ReviewViewModel
+import com.example.reviewsapp.ui.viewmodel.ReviewViewModelFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 object ReviewDestinations {
     const val REVIEW_LIST = "review_list"
@@ -33,6 +36,9 @@ object ReviewDestinations {
 @Composable
 fun ReviewNavHost() {
     val navController = rememberNavController()
+    val reviewViewModel: ReviewViewModel = viewModel(
+        factory = ReviewViewModelFactory(ReviewRepository())
+    )
 
     NavHost(
         navController = navController,
@@ -45,7 +51,8 @@ fun ReviewNavHost() {
                 },
                 onEditReviewClick = { reviewId ->
                     navController.navigate("${ReviewDestinations.REVIEW_FORM}?${ReviewDestinations.REVIEW_ID_ARG}=$reviewId")
-                }
+                },
+                viewModel = reviewViewModel
             )
         }
 
@@ -62,7 +69,8 @@ fun ReviewNavHost() {
 
             ReviewFormScreen(
                 reviewId = reviewId,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                viewModel = reviewViewModel
             )
         }
     }
@@ -95,27 +103,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.reviewsapp.data.repository.ReviewRepository
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModel
-import com.example.reviewsapp.ui.viewmodel.ReviewViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewListScreen(
     onAddReviewClick: () -> Unit,
     onEditReviewClick: (Int) -> Unit,
-    viewModel: ReviewViewModel = viewModel(
-        factory = ReviewViewModelFactory(ReviewRepository())
-    )
+    viewModel: ReviewViewModel
 ) {
     val reviews by viewModel.reviews.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.loadReviews()
+    }
 
     Scaffold(
         topBar = {
@@ -206,20 +214,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reviewsapp.data.model.Review
-import com.example.reviewsapp.data.repository.ReviewRepository
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModel
-import com.example.reviewsapp.ui.viewmodel.ReviewViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewFormScreen(
     reviewId: Int = -1,
     onBackClick: () -> Unit,
-    viewModel: ReviewViewModel = viewModel(
-        factory = ReviewViewModelFactory(ReviewRepository())
-    )
+    viewModel: ReviewViewModel
 ) {
     val selectedReview by viewModel.selectedReview.collectAsState()
 
@@ -352,6 +355,10 @@ Separating responsibilities:
 - `ReviewNavHost` decides which screen to show
 - `ReviewViewModel` still manages the state and API calls
 - the repository remains responsible for network access
+
+The navigation host creates one `ReviewViewModel` and passes that same instance to both screens. This keeps the list synchronized after a review is added, updated, or deleted.
+
+`ReviewListScreen` uses `LaunchedEffect(viewModel)` to request the list when the screen becomes active. Without that call, `_reviews` keeps its initial empty value and the UI shows "No reviews available yet."
 
 ## 4.5 Connect the app to navigation
 
