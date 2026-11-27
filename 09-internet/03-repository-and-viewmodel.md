@@ -149,15 +149,19 @@ class ReviewViewModel(
     }
 
     fun updateReview(review: Review) {
-        viewModelScope.launch {
-            val updated = repository.updateReview(review.id, review)
-            if (updated != null) {
-                val current = _reviews.value.toMutableList()
-                val index = current.indexOfFirst { it.id == review.id }
-                if (index >= 0) {
-                    current[index] = updated
-                    _reviews.value = current
-                }
+    viewModelScope.launch {
+        val success = repository.updateReview(review.id, review)
+
+        if (success) {
+            val current = _reviews.value.toMutableList()
+            val index = current.indexOfFirst { it.id == review.id }
+
+            if (index >= 0) {
+                current[index] = review
+                _reviews.value = current
+            } else {
+                current.add(0, review)
+                _reviews.value = current
             }
         }
     }
