@@ -86,7 +86,7 @@ class ReviewRepository {
 The `ViewModel` has two responsibilities:
 
 - expose state to the UI (`reviews`, `selectedReview`, `isLoading`)
-- expose actions that trigger network operations (`loadReviews`, `addReview`, `updateReview`, `deleteReview`)
+- expose actions that trigger network operations (`loadReviews`, `getReviewById`, `addReview`, `updateReview`, `deleteReview`)
 
 This keeps the screen composable focused on rendering and user interaction instead of mixing it with networking logic.
 
@@ -123,6 +123,12 @@ class ReviewViewModel(
             val result = repository.getReviews()
             _reviews.value = result
             _isLoading.value = false
+        }
+    }
+
+    fun getReviewById(id: Int) {
+        viewModelScope.launch {
+            _selectedReview.value = repository.getReviewById(id)
         }
     }
 
