@@ -77,13 +77,13 @@ interface ReviewApi {
     suspend fun getReviews(): List<Review>
 
     @GET("api/review/{id}")
-    suspend fun getReviewById(@Path("id") id: Int): Review
+    suspend fun getReviewById(@Path("id") id: Int): Review?
 
     @POST("api/review")
-    suspend fun addReview(@Body review: Review): Review
+    suspend fun addReview(@Body review: Review): Review?
 
     @PUT("api/review/{id}")
-    suspend fun updateReview(@Path("id") id: Int, @Body review: Review): Review
+    suspend fun updateReview(@Path("id") id: Int, @Body review: Review): Review?
 
     @DELETE("api/review/{id}")
     suspend fun deleteReview(@Path("id") id: Int): Unit
