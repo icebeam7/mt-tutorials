@@ -62,7 +62,6 @@ class ReviewRepository {
             api.updateReview(id, review)
             return true
         } catch(e: HttpException) {
-            Log.e("ErrorReviewRepo",e.toString())
             return false
         } catch (e: IOException) {
             return false
@@ -178,6 +177,7 @@ class ReviewViewModel(
             }
         }
     }
+}
 }
 ```
 
