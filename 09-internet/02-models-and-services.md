@@ -83,7 +83,7 @@ interface ReviewApi {
     suspend fun addReview(@Body review: Review): Review?
 
     @PUT("api/review/{id}")
-    suspend fun updateReview(@Path("id") id: Int, @Body review: Review): Review?
+    suspend fun updateReview(@Path("id") id: Int, @Body review: Review): Unit
 
     @DELETE("api/review/{id}")
     suspend fun deleteReview(@Path("id") id: Int): Unit
