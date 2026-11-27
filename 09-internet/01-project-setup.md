@@ -19,7 +19,7 @@ Then open the module-level `build.gradle.kts` file and add these dependencies:
 
 ```kotlin
 dependencies {
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose") // if you get an error, try version 2.10.0
 
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
