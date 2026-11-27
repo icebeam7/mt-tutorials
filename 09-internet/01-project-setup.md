@@ -10,6 +10,7 @@ Open Android Studio and create a new project using:
 - Name: `ReviewsApp`
 - Language: Kotlin
 - Use Compose template
+- **Minimum SDK version: 26** (Important: Set the api version to 26 instead of the default version 24)
 
 ## 1.2 Add the required dependencies
 
