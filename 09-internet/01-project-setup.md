@@ -33,7 +33,7 @@ Also, in the same file, add the following element in `plugins` section:
 
 ```kotlin
 plugins {
-    kotlin("plugin.serialization") version 2.x.x // use your Kotlin version, see libs.versions.toml
+    kotlin("plugin.serialization") version "2.x.x" // use your Kotlin version, see libs.versions.toml
 }
 ```
 
