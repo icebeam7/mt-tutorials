@@ -316,7 +316,7 @@ fun ReviewFormScreen(
             ) {
                 Button(onClick = {
                     val newReview = Review(
-                        id = reviewId,
+                        id = if (reviewId == -1) 0 else reviewId,
                         author = author.ifBlank { "Anonymous" },
                         comment = comment.ifBlank { "No comment" },
                         score = score.toIntOrNull() ?: 0,
