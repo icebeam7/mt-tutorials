@@ -26,6 +26,7 @@ import com.example.reviewsapp.ui.screen.reviewlist.ReviewListScreen
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModel
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.navArgument
 
 object ReviewDestinations {
     const val REVIEW_LIST = "review_list"
