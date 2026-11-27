@@ -89,6 +89,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -104,6 +105,7 @@ import com.example.reviewsapp.data.repository.ReviewRepository
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModel
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewListScreen(
     onAddReviewClick: () -> Unit,
@@ -190,6 +192,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -209,6 +212,7 @@ import com.example.reviewsapp.data.repository.ReviewRepository
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModel
 import com.example.reviewsapp.ui.viewmodel.ReviewViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewFormScreen(
     reviewId: Int = -1,
@@ -354,6 +358,9 @@ Separating responsibilities:
 In `MainActivity.kt`, replace the single-screen example with the nav host:
 
 ```kotlin
+import com.example.reviewsapp.ui.navigation.ReviewNavHost
+//..
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
