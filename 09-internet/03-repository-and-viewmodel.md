@@ -4,6 +4,12 @@ The repository is the layer that hides the network implementation. The UI should
 
 ## 3.1 Create the repository
 
+This repository is responsible for:
+
+- making network calls
+- handling the Retrofit response
+- returning values to the `ViewModel`
+
 Create a file named `ReviewRepository.kt` in the package `com.example.reviewsapp.data.repository`:
 
 ```kotlin
@@ -11,61 +17,78 @@ package com.example.reviewsapp.data.repository
 
 import com.example.reviewsapp.data.model.Review
 import com.example.reviewsapp.data.remote.RetrofitInstance
+import retrofit2.HttpException
+import java.io.IOException
 
 class ReviewRepository {
-
     private val api = RetrofitInstance.api
 
     suspend fun getReviews(): List<Review> {
-        val response = api.getReviews()
-        return if (response.isSuccessful) {
-            response.body() ?: emptyList()
-        } else {
-            emptyList()
+        try {
+            val response = api.getReviews()
+            return response
+        } catch(e: HttpException) {
+            return emptyList()
+        } catch (e: IOException) {
+            // Network errors: no Internet, timeout
+            return emptyList()
         }
     }
 
     suspend fun getReviewById(id: Int): Review? {
-        val response = api.getReviewById(id)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
+        try {
+            val response = api.getReviewById(id)
+            return response
+        } catch(e: HttpException) {
+            return null
+        } catch (e: IOException) {
+            return null
         }
     }
 
     suspend fun addReview(review: Review): Review? {
-        val response = api.addReview(review)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
+        try {
+            val response = api.addReview(review)
+            return response
+        } catch(e: HttpException) {
+            return null
+        } catch (e: IOException) {
+            return null
         }
     }
 
     suspend fun updateReview(id: Int, review: Review): Review? {
-        val response = api.updateReview(id, review)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
+        try {
+            val response = api.updateReview(id, review)
+            return response
+        } catch(e: HttpException) {
+            return null
+        } catch (e: IOException) {
+            return null
         }
     }
 
     suspend fun deleteReview(id: Int): Boolean {
-        val response = api.deleteReview(id)
-        return response.isSuccessful
+        try {
+            api.deleteReview(id)
+            return true
+        } catch(e: HttpException) {
+            return false
+        } catch (e: IOException) {
+            return false
+        }
     }
 }
 ```
 
-This repository is responsible for:
-
-- making network calls
-- handling the Retrofit response
-- returning app-friendly values to the `ViewModel`
-
 ## 3.2 Create the ViewModel
+
+The `ViewModel` has two responsibilities:
+
+- expose state to the UI (`reviews`, `selectedReview`, `isLoading`)
+- expose actions that trigger network operations (`loadReviews`, `addReview`, `updateReview`, `deleteReview`)
+
+This keeps the screen composable focused on rendering and user interaction instead of mixing it with networking logic.
 
 Create a file named `ReviewViewModel.kt` in the package `com.example.reviewsapp.ui.viewmodel`:
 
@@ -165,7 +188,6 @@ class ReviewViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReviewViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
             return ReviewViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
@@ -173,26 +195,13 @@ class ReviewViewModelFactory(
 }
 ```
 
-## 3.4 Why ViewModel is useful
-
-The `ViewModel` has two responsibilities:
-
-- expose state to the UI (`reviews`, `selectedReview`, `isLoading`)
-- expose actions that trigger network operations (`loadReviews`, `addReview`, `updateReview`, `deleteReview`)
-
-This keeps the screen composable focused on rendering and user interaction instead of mixing it with networking logic.
-
-## 3.5 Use the ViewModel factory
-
-This version passes the repository into the `ViewModel` through a factory. This is the recommended pattern when the `ViewModel` depends on a repository or any other dependency.
+The repository is passed into the `ViewModel` through a factory. This is the recommended pattern when the `ViewModel` depends on a repository or any other dependency.
 
 ```kotlin
 val repository = ReviewRepository()
 val viewModelFactory = ReviewViewModelFactory(repository)
 val viewModel: ReviewViewModel = viewModel(factory = viewModelFactory)
 ```
-
-This is useful because:
 
 - the `ViewModel` can receive dependencies from the outside
 - the code is easier to test
